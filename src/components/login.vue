@@ -24,18 +24,31 @@ export default {
     }
   },
   methods: {
-    handleLogin () {
-      console.log(1)
-      this.$http.post(`login`, this.formDate).then(res => {
-        console.log(res)
-        const {data: {data, meta: {msg, status}}} = res
-        console.log(data, msg)
-        if (status === 200) {
-          this.$message(msg)
-        } else {
-          this.$message.error(msg)
-        }
-      })
+    async handleLogin () {
+      const res = await this.$http.post(`login`, this.formDate)
+      const {data: {data: {token}, meta: {msg, status}}} = res
+      if (status === 200) {
+        this.$message(msg)
+        this.$router.push({
+          name: 'Home'
+        })
+        localStorage.setItem('bbr', token)
+      } else {
+        this.$message.error(msg)
+      }
+      // .then(res => {
+      //   console.log(res)
+      //   const {data: {data, meta: {msg, status}}} = res
+      //   console.log(data, msg)
+      //   if (status === 200) {
+      //     this.$message(msg)
+      //     this.$router.push({
+      //       name: 'Home'
+      //     })
+      //   } else {
+      //     this.$message.error(msg)
+      //   }
+      // })
     }
   }
 }
